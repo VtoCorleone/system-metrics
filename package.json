@@ -4,8 +4,8 @@
   "description": "Application that monitors system metrics and sends data to a database",
   "main": "src/index.js",
   "scripts": {
-    "start": "node src/index.js",
-    "test": "npm test"
+    "start": "FILE_LOCATION=./data-files node -r dotenv/config src/index.js",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -28,6 +28,7 @@
     "eslint": "^5.10.0",
     "eslint-config-airbnb": "^17.1.0",
     "jest": "^23.6.0",
+    "joi": "^14.3.0",
     "nodemon": "^1.18.9",
     "systeminformation": "^3.52.2"
   }

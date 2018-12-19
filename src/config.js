@@ -1,0 +1,11 @@
+const {
+  FILE_LOCATION,
+  ITERATIONS_TO_SAVE,
+  ITERATION_INTERVAL,
+} = process.env;
+
+module.exports = {
+  FILE_LOCATION,
+  ITERATIONS_TO_SAVE,
+  ITERATION_INTERVAL,
+};

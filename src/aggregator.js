@@ -1,26 +1,29 @@
 const fs = require('fs');
 const util = require('util');
 
+const config = require('./config');
+
 const writeFile = util.promisify(fs.writeFile);
 
-// TODO: create as envars
-const fileLocation = '';
-const iterationsToSave = 15;
+// fs.existsSync(config.FILE_LOCATION) || fs.mkdirSync(config.FILE_LOCATION);
 
-const dataCollection = [];
+let dataCollection = [];
 let counter = 1;
 
 const resetCounter = () => counter = 1;
+const resetDataCollection = () => dataCollection = [];
 
-const setData = data => {
+const setData = async data => {
   dataCollection.push(data);
-  if (counter > iterationsToSave) {
+  console.log(`counter: ${counter} - config ${config.ITERATIONS_TO_SAVE}`);
+  if (counter > config.ITERATIONS_TO_SAVE) {
     try {
-      await writeFile(`${fileLocation}/${new Date()}.json`, dataCollection, 'utf8');
+      console.log(`Writing tile to ${config.FILE_LOCATION}/${new Date()}.json`);
+      await writeFile(`${config.FILE_LOCATION}/${new Date()}.json`, dataCollection, 'utf8');
     } catch (error) {
       console.error(error);
     }
-    dataCollection = [];
+    resetDataCollection();
     resetCounter();
   } else {
     counter += 1;
