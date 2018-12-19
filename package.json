@@ -1,0 +1,34 @@
+{
+  "name": "system-metrics",
+  "version": "0.0.1",
+  "description": "Application that monitors system metrics and sends data to a database",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VtoCorleone/system-metrics.git"
+  },
+  "keywords": [
+    "system",
+    "metrics",
+    "influxdb"
+  ],
+  "author": "Shane Chapman",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/VtoCorleone/system-metrics/issues"
+  },
+  "homepage": "https://github.com/VtoCorleone/system-metrics#readme",
+  "dependencies": {
+    "debug": "^4.1.0",
+    "dotenv": "^6.2.0",
+    "eslint": "^5.10.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "jest": "^23.6.0",
+    "nodemon": "^1.18.9",
+    "systeminformation": "^3.52.2"
+  }
+}
