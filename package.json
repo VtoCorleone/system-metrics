@@ -4,8 +4,8 @@
   "description": "Application that monitors system metrics and sends data to a database",
   "main": "src/index.js",
   "scripts": {
-    "start": "FILE_LOCATION=./data-files node -r dotenv/config src/index.js",
-    "test": "jest"
+    "start": "node -r dotenv/config src/index.js",
+    "test": "jest src/*.test.js"
   },
   "repository": {
     "type": "git",
@@ -31,5 +31,10 @@
     "joi": "^14.3.0",
     "nodemon": "^1.18.9",
     "systeminformation": "^3.52.2"
+  },
+  "jest": {
+    "watchPathIgnorePatterns": [
+      "logs"
+    ]
   }
 }
