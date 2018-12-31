@@ -1,9 +1,10 @@
 const {
-  collectData,
+  getData,
   writeData,
   readData,
   deleteFile,
-  fileExists
+  fileExists,
+  collectMetrics
 } = require("./index");
 const {
   validateSchema,
@@ -12,9 +13,9 @@ const {
 const equal = require("assert").deepEqual;
 
 describe("index.js", () => {
-  describe("collectData()", () => {
+  describe("getData()", () => {
     it("should validate system metrics payload", async () => {
-      const result = await collectData();
+      const result = await getData();
       const joiResult = validateSchema(result, systemMetricsSchema);
       equal(joiResult.error, null);
     });
@@ -37,12 +38,30 @@ describe("index.js", () => {
     });
 
     it("should delete the file", async () => {
-      const result = await deleteFile(filePath);
+      await deleteFile(filePath);
     });
 
     it("should be deleted", async () => {
       const result = await fileExists(filePath);
       equal(result, false);
+    });
+  });
+
+  describe("collectMetrics()", () => {
+    let filePath;
+    it("should write metrics to a file", async () => {
+      filePath = await collectMetrics();
+      equal(typeof filePath, "string");
+    });
+
+    it("should have written the data", async () => {
+      const result = await readData(filePath);
+      const joiResult = validateSchema(result, systemMetricsSchema);
+      equal(joiResult.error, null);
+    });
+
+    afterAll(async () => {
+      await deleteFile(filePath);
     });
   });
 });

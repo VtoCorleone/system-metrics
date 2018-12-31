@@ -10,35 +10,7 @@ const access = util.promisify(fs.access);
 const { FILE_LOCATION } = require("./config");
 const aggregator = require("./aggregator");
 
-const callMetrics = async () => {
-  try {
-    // console.log({ mem: await si.mem() });
-    // console.log({ fs: await si.fsSize() });
-    // console.log({ fsStats: await si.fsStats() });
-    // console.log({ disksIO: await si.disksIO() });
-    // console.log({ currentLoad: await si.currentLoad() });
-    // console.log({ networkStats: await si.networkStats() });
-    // console.log({ memLayout: await si.memLayout() });
-    // console.log({ diskLayout: await si.diskLayout() });
-
-    const data = {};
-    const now = new Date();
-    data[now.getTime()] = {
-      mem: await si.mem(),
-      fs: await si.fsSize(),
-      fsStats: await si.fsStats(),
-      disksIO: await si.disksIO(),
-      currentLoad: await si.currentLoad(),
-      networkStats: await si.networkStats()
-    };
-
-    // aggregator.setData(data);
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const collectData = async () => {
+const getData = async () => {
   const timestamp = Date.now();
   return {
     timestamp,
@@ -52,30 +24,18 @@ const collectData = async () => {
 };
 
 const writeData = async data => {
-  try {
-    const destination = `${FILE_LOCATION}/${Date.now()}_systemmetrics.json`;
-    await writeFile(destination, JSON.stringify(data), "utf8");
-    return destination;
-  } catch (e) {
-    console.log("e:", e);
-  }
+  const destination = `${FILE_LOCATION}/${Date.now()}_systemmetrics.json`;
+  await writeFile(destination, JSON.stringify(data), "utf8");
+  return destination;
 };
 
 const readData = async filePath => {
-  try {
-    const result = await readFile(filePath);
-    return JSON.parse(result.toString());
-  } catch (e) {
-    console.log("e:", e);
-  }
+  const result = await readFile(filePath);
+  return JSON.parse(result.toString());
 };
 
-const deleteFile = async filePath => {
-  try {
-    await unlink(filePath);
-  } catch (e) {
-    console.log("e:", e);
-  }
+const deleteFile = filePath => {
+  return unlink(filePath);
 };
 
 const fileExists = async filePath => {
@@ -84,15 +44,25 @@ const fileExists = async filePath => {
     return true;
   } catch (e) {
     if (e.code === "ENOENT") return false;
+    throw e;
+  }
+};
+
+const collectMetrics = async () => {
+  try {
+    const data = await getData();
+    return writeData(data);
+  } catch (e) {
+    if (e.code === "ENOENT") return false;
     console.log("e:", e);
   }
 };
-// setInterval(callMetrics, config.ITERATION_INTERVAL);
 
 module.exports = {
-  collectData,
+  getData,
   writeData,
   readData,
   deleteFile,
-  fileExists
+  fileExists,
+  collectMetrics
 };
